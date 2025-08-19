@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}"
+      lang="en">
+<head>
+    <link th:href="@{/css/dining-table.css}" rel="stylesheet"/>
+    <title>Layouts</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card">
+        <div class="card-header pb-0 d-flex justify-content-sm-between">
+            <h6>Layouts</h6>
+            <a class="btn btn-dark mb-0 text-end" th:href="@{/layout/create}">Create Layout</a>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+            <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0" th:unless="${layouts == null}">
+                    <thead>
+                    <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Description
+                        </th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Created Date
+                        </th>
+                        <th class="text-secondary opacity-7"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="layout : ${layouts}">
+                        <td class="align-middle ps-4">
+                            <span class="text-secondary text-xs font-weight-bold" th:text="${layout.name}"></span>
+                            <span th:if="${layout.archived}" class="text-warning text-xs ms-2">(Archived)</span>
+                        </td>
+                        <td class="align-middle ps-4">
+                            <span class="text-secondary text-xs font-weight-bold" th:text="${layout.description}"></span>
+                        </td>
+                        <td class="align-middle ps-4">
+                            <span class="text-secondary text-xs font-weight-bold" th:text="${layout.createdDate}"></span>
+                        </td>
+                        <td class="align-middle ps-4">
+                            <div class="d-flex">
+                                <a th:href="@{/layout/detail/{id}(id=${layout.id})}" class="text-secondary font-weight-bold text-xs me-3"
+                                   data-toggle="tooltip"
+                                   data-original-title="View layout details">
+                                    Details
+                                </a>
+                                <a th:href="@{/layout/edit/{id}(id=${layout.id})}" class="text-secondary font-weight-bold text-xs me-3"
+                                   data-toggle="tooltip"
+                                   data-original-title="Edit layout">
+                                    Edit
+                                </a>
+                                <a th:href="@{/layout/delete/{id}(id=${layout.id})}" class="text-danger font-weight-bold text-xs"
+                                   data-toggle="tooltip"
+                                   data-original-title="Delete layout">
+                                    Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<div class="card" th:fragment="selectItemRadio(menu)">
+    <div class="card-body p-2 align-content-center">
+        <div class="form-check" th:for="'menuRadio_' + ${menu.id}">
+            <label class="form-check-label text-xs"
+                   th:for="'menuRadio_' + ${menu.id}"
+                   th:text="${menu.name}"></label>
+            <span class="text-xs text-warning" th:if="${menu.archived}">(Archived)</span>
+            <input class="form-check-input" type="radio" name="menuId"
+                   th:id="'menuRadio_' + ${menu.id}" th:field="*{menu}"
+                   th:value="${menu.id}">
+        </div>
+    </div>
+</div>
+</body>
+</html>

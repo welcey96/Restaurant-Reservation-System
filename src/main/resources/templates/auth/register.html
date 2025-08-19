@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,800" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/dashboard.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <title>Sign Up</title>
+</head>
+<body>
+<main class="main-content min-vh-100 p-sm-4 d-md-flex bg-gradient-faded-white">
+    <div class="card shadow-xl col-md-6 col-lg-5 max-width-500 m-sm-auto">
+        <div class="card-header"><h3 class="text-primary text-center mb-0">Sign Up</h3></div>
+        <div class="card-body py-0">
+            <form th:action="@{/register}" method="post" th:object="${register}">
+                <div class="row mb-3">
+                    <div class="form-group col-12 col-sm-6 mb-0">
+                        <label class="control-label" for="firstName">First Name</label>
+                        <input th:field="*{firstName}" id="firstName" class="form-control" placeholder="First Name"/>
+                        <div class="alert text-sm text-danger p-1 mb-0" th:errors="*{firstName}"></div>
+                    </div>
+                    <div class="form-group col mb-0">
+                        <label class="control-label" for="lastName">Last Name</label>
+                        <input th:field="*{lastName}" id="lastName" class="form-control" placeholder="Last Name"/>
+                        <div class="alert text-sm text-danger p-1 mb-0" th:errors="*{lastName}"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="email">Email</label>
+                    <input th:field="*{email}" id="email" class="form-control" placeholder="Email Address"/>
+                    <div class="alert text-sm text-danger p-1" th:errors="*{email}"></div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="username">Username</label>
+                    <input th:field="*{username}" id="username" class="form-control" placeholder="Username"/>
+                    <div class="alert text-sm text-danger p-1" th:errors="*{username}"></div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="password">Password</label>
+                    <input th:type="password" th:field="*{password}" id="password" class="form-control"
+                           placeholder="Password"/>
+                    <div class="alert text-sm text-danger p-1" th:errors="*{password}"></div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Sign Up" class="btn btn-primary w-100"/>
+                </div>
+            </form>
+        </div>
+        <p class="card-footer text-center text-xs pt-0">
+            Already have an account?
+            <a class="font-weight-bold text-decoration-underline" th:href="@{/login}">Sign In</a>
+        </p>
+    </div>
+</main>
+
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>

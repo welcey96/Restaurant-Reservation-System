@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<!--https://www.baeldung.com/spring-thymeleaf-fragments-->
+<div th:fragment="confirmModal(title, message, id, modalFooterContent)" class="modal fade"
+     th:id="'confirmModal_' + ${id}" tabindex="-1"
+     aria-labelledby="confirmModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0">
+            <div class="modal-header align-items-center border-bottom-0">
+                <div class="modal-title d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-circle-question text-xl font-weight-bold text-danger"></i>
+                    <h6 class="mb-0" th:text="${title}"></h6>
+                </div>
+                <button type="button" class="btn-close text-dark d-flex align-items-center"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark text-xl font-weight-bold text-danger"></i>
+                </button>
+            </div>
+            <div class="modal-body px-4">
+                <p class="text-sm mb-0" th:text=" ${message}"></p>
+            </div>
+            <div class="modal-footer border-top-0 text-end">
+                <button type="button" class="btn btn-warning m-1" data-bs-dismiss="modal">Cancel</button>
+                <div th:replace="${modalFooterContent}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

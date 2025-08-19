@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}"
+      lang="en">
+<head>
+    <link th:href="@{/css/dining-table.css}" rel="stylesheet"/>
+    <title>Layout Details</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card col-6 mx-auto">
+
+        <div class="card-header pb-0 d-flex justify-content-sm-between">
+            <h6>Layout Details</h6>
+            <div>
+                <a class="btn btn-primary mb-0 me-2" th:href="@{/layout/edit/{id}(id=${layout.id})}">Edit Layout</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Layout Information</h5>
+                    <div class="mb-3">
+                        <strong>Name:</strong> <span th:text="${layout.name}"></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Description:</strong> <span th:text="${layout.description}"></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Created Date:</strong> <span th:text="${#temporals.format(layout.createdDate, 'MMM dd, yyyy')}"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Last Updated:</strong> <span th:text="${#temporals.format(layout.lastUpdated, 'MMM dd, yyyy hh:mm a')}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <h5 class="mt-4">Dining Tables</h5>
+            <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0" th:if="${!diningTables.empty}">
+                    <thead>
+                    <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                            Number of Seats
+                        </th>
+                        <th class="text-secondary opacity-7"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="table, count : ${diningTables}">
+                        <td>
+                            <span class="text-secondary text-xs font-weight-bold" th:text="${count.index + 1}"></span>
+                        </td>
+                        <td>
+                            <span class="text-secondary text-xs font-weight-bold" th:text="${table.numberOfSeats}"></span>
+                            <span th:if="${table.archived}" class="text-warning text-xs ms-2">(Archived)</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div th:if="${diningTables.empty}" class="alert alert-info">
+                    No dining tables have been added to this layout yet.
+                </div>
+                <div class="card-header pb-0">
+                    <a th:href="@{/layout}" class="btn btn-secondary">Back to Layout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

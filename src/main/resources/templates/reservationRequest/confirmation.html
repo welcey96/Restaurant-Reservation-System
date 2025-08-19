@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}"
+      lang="en">
+<head>
+    <link th:href="@{/css/dining-table.css}" rel="stylesheet"/>
+    <title>Reservation Confirmation</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card mx-auto min-vh-97">
+        <div class="card-header">
+            <h6>Reservation Confirmation</h6>
+        </div>
+        <div class="card shadow-lg col-md-8 mx-auto">
+            <div class="card-body">
+                <div class="alert alert-success" role="alert" th:text="${message}">
+                    Your reservation has been confirmed successfully!
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h6>Reservation Details</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Name:</strong> <span th:text="${reservation.firstName + ' ' + reservation.lastName}"></span></p>
+                                <p><strong>Email:</strong> <span th:text="${reservation.email}"></span></p>
+                                <p><strong>Group Size:</strong> <span th:text="${reservation.groupSize}"></span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Event:</strong> <span th:text="${reservation.seating.event.name}"></span></p>
+                                <p><strong>Date & Time:</strong> <span th:text="${#temporals.format(reservation.seating.startDateTime, 'yyyy-MM-dd hh:mm a')}"></span></p>
+                                <p><strong>Status:</strong>
+                                    <span class="badge"
+                                          th:classappend="'bg-' + ${reservation.status == T(nbcc.enums.ReservationStatus).PENDING ? 'warning' :
+                                                                   (reservation.status == T(nbcc.enums.ReservationStatus).APPROVED ? 'success' : 'danger')}"
+                                          th:text="${reservation.status}">
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <p>A confirmation email has been sent to your email address.</p>
+                    <a th:href="@{/reservation/list}" class="btn btn-primary">View All Reservations</a>
+                    <a th:href="@{/}" class="btn btn-outline-secondary ms-2">Return to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<div th:fragment="updateItemModal(id, menuId, item)" class="modal modal-md fade"
+     data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateItemModal"
+     th:id="'updateItemModal_' + ${id}">
+    <div class="modal-dialog">
+        <div class="modal-content border-0">
+            <div class="modal-header align-items-center border-bottom-0">
+                <h6 class="modal-title">
+                    <i class="fa-solid fa-marker text-lg text-warning"></i> Update Menu Item
+                </h6>
+                <button type="button" class="btn-close text-dark d-flex align-items-center"
+                        data-bs-dismiss="modal" aria-label="Close"
+                        th:onclick="|resetForm('updateItemForm_' + ${id})|">
+                    <i class="fa-solid fa-xmark text-xl text-danger"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:id="'updateItemForm_' + ${id}"
+                      th:class="update-item-form"
+                      th:method="post"
+                      th:action="@{/menu/{menuId}/item/edit/{id}(menuId=${menuId},id=${id})}"
+                      th:object="${item}">
+                    <input type="hidden" name="id" th:value="*{id}"/>
+                    <div class="form-group">
+                        <label class="control-label" for="name"> Name</label>
+                        <input type="text" class="form-control" id="name" name="name" th:value="*{name}"/>
+                        <div class="alert text-sm text-danger p-1 d-none" id="nameError">
+                            Name is required
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="description">Description</label>
+                        <textarea th:text="*{description}" id="description" name="description" class="form-control">
+                        </textarea>
+                    </div>
+                    <div class="card-footer text-end p-0">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                                th:onclick="|resetForm('updateItemForm_' + ${id})|">Cancel
+                        </button>
+                        <button name="action" value="Update" class="btn btn-primary">Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

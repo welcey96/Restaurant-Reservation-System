@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}"
+      lang="en">
+<head>
+    <link th:href="@{/css/dining-table.css}" rel="stylesheet"/>
+    <title>Create Reservation Request</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card mx-auto min-vh-97">
+        <div class="card-header">
+            <h6>Create Reservation Request</h6>
+        </div>
+        <div class="card shadow-lg col-md-8 mx-auto">
+            <div class="card-body">
+                <form th:action="@{/reservation/create}" th:object="${reservationRequest}" th:method="post">
+                    <!--                    <div class="form-group">-->
+                    <!--                        <label class="control-label" for="seating">Select Seating Time:</label>-->
+                    <!--                        <select th:field="*{seating}" id="seating" class="form-control">-->
+                    <!--                            <option value="">Select a Seating Time</option>-->
+                    <!--                            <option th:each="seating : ${seatingTimes}"-->
+                    <!--                                    th:value="${seating.id}"-->
+                    <!--                                    th:text="${seating.event.name + ' - ' + #temporals.format(seating.startDateTime, 'yyyy-MM-dd hh:mm a')}">-->
+                    <!--                            </option>-->
+                    <!--                        </select>-->
+                    <!--                        <div class="alert text-sm text-danger p-1" th:errors="*{seating}"></div>-->
+                    <!--                    </div>-->
+                    <div class="form-group">
+                        <label class="control-label">Select Seating Time:</label>
+                        <div class="btn-group-toggle d-flex flex-wrap" data-toggle="buttons">
+                            <label th:each="seating : ${seatingTimes}" class="btn btn-outline-primary m-1">
+                                <input type="radio" th:field="*{seating}" th:value="${seating.id}" class="d-none">
+                                <span th:text="${seating.event.name + ' - ' + #temporals.format(seating.startDateTime, 'yyyy-MM-dd hh:mm a')}"></span>
+                            </label>
+                        </div>
+                        <div class="alert text-sm text-danger p-1" th:errors="*{seating}"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="firstName">First Name:</label>
+                        <input th:field="*{firstName}" id="firstName" class="form-control"/>
+                        <div class="alert text-sm text-danger p-1" th:errors="*{firstName}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="lastName">Last Name:</label>
+                        <input th:field="*{lastName}" id="lastName" class="form-control"/>
+                        <div class="alert text-sm text-danger p-1" th:errors="*{lastName}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="email">Email:</label>
+                        <input type="email" th:field="*{email}" id="email" class="form-control"/>
+                        <div class="alert text-sm text-danger p-1" th:errors="*{email}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="groupSize">Group Size:</label>
+                        <input type="number" th:field="*{groupSize}" id="groupSize" class="form-control"/>
+                        <div class="alert text-sm text-danger p-1" th:errors="*{groupSize}"></div>
+                    </div>
+                    <div class="card-footer text-end p-0">
+                        <input type="submit" name="action" value="Submit Request" class="btn btn-primary"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
+<style>
+
+</style>
+
+<script>
+
+</script>
+

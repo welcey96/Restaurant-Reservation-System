@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Details - ' + ${menu.name}"></title>
+</head>
+<body>
+<section id="menu-item-details" layout:fragment="content">
+    <div class="card min-vh-97">
+        <div class="card-body ">
+            <div class="card bg-dark text-white shadow-lg" th:classappend="${session.loggedIn} ? '': 'pb-4'">
+                <div class="card-header bg-dark py-3">
+                    <a th:href="@{/menus}" class="d-flex align-items-center"> <i class="h5 fa-solid fa-chevron-left text-white mb-0"></i>
+                        <span class="ms-2 text-primary text-sm mb-0">Menus</span>
+                    </a>
+                </div>
+                <div class="card-header bg-dark py-2">
+                    <h4 class="text-bold text-primary mb-0" th:text="${menu.name}"></h4>
+                </div>
+                <div class="card-body py-0">
+                    <p class="mb-2 text-xs">Description:
+                        <span class="font-weight-bold ms-sm-2"
+                              th:if="${!#strings.isEmpty(menu.description)}"
+                              th:text="${menu.description}"></span>
+                        <span class="font-weight-normal ms-sm-2"
+                              th:if="${#strings.isEmpty(menu.description)}"
+                              th:text="'n/a'"></span>
+                    </p>
+                </div>
+
+                <div class="card-footer text-center text-sm-end" th:if="${session.loggedIn}">
+                    <button type="button" class="btn btn-sm text-white bg-warning mb-sm-0 move-on-hover"
+                            data-bs-toggle="modal" th:data-bs-target="'#updateMenuModal_' + ${menu.id}">
+                        Update
+                    </button>
+                    <a th:href="@{/menu/delete/{id}(id=${menu.id})}"
+                       class="btn btn-sm text-white bg-danger mb-sm-0 move-on-hover">
+                        Delete
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-header d-flex align-items-center flex-wrap justify-content-between px-0">
+                    <h5 class="text-lg mb-0">Menu Items</h5>
+                    <button type="button" class="btn btn-sm btn-outline-success mb-0 shadow-xs move-on-hover"
+                            data-bs-toggle="modal" th:data-bs-target="'#addItemModal_' + ${menu.id}"
+                            th:if="${session.loggedIn} and not ${items.isEmpty()}">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        Add Item
+                    </button>
+                </div>
+                <div class="row gap-3">
+                    <div class="card item shadow-xl col-sm-5 col-md-3" th:each="menuItem: ${items}"
+                         th:unless="${items.isEmpty()}">
+                        <div class="card-header text-end px-0 py-2" th:if="${session.loggedIn}">
+                            <button type="button" class="btn btn-sm mb-0 py-2 px-3 shadow-xs bg-gray-100 move-on-hover"
+                                    data-bs-toggle="modal" th:data-bs-target="'#confirmModal_' + ${menuItem.id}">
+                                <i class="fa-solid fa-trash text-xs text-danger"></i>
+                            </button>
+                        </div>
+                        <div class="card-body text-center" th:classappend="${session.loggedIn} ? 'py-0' : 'py-4'">
+                            <i class="fa-solid fa-money-bill-wheat h4"></i>
+                            <h5 class="text-sm text-start text-primary mt-2" th:text="${menuItem.name}"></h5>
+                            <p class="text-xs text-start mb-0" th:text="${menuItem.description}"></p>
+                        </div>
+                        <div class="card-footer justify-content-end px-0 py-2 d-flex flex-wrap-reverse"
+                             th:if="${session.loggedIn}">
+                            <button type="button" class="btn btn-sm mb-0 shadow-xs move-on-hover"
+                                    data-bs-toggle="modal" th:data-bs-target="'#updateItemModal_' + ${menuItem.id}">
+                                <i class="fa-solid fa-marker text-xs text-warning"></i>
+                                Update
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" class="m-auto col-sm-6 col-lg-4 btn p-4 border-dashed btn-outline-primary text-dark
+                        font-weight-light height-300" data-bs-toggle="modal"
+                            th:data-bs-target="'#addItemModal_' + ${menu.id}"
+                            th:if="${session.loggedIn} and ${items.isEmpty()}">
+                        <i class="fa-solid fa-plus h2 d-block"></i>
+                        No menu items available. Click here to add one
+                    </button>
+                    <div class="font-weight-light text-md text-center text-primary"
+                         th:if="not ${session.loggedIn} and ${items.isEmpty()}">
+                        No menu items available
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:if="${session.loggedIn}" th:insert="~{fragments/menus/update-modal ::
+           updateMenuModal(menu=${menu})}">
+    </th:block>
+    <th:block th:if="${session.loggedIn}" th:insert="~{fragments/menu-item/add-modal :: addItemModal(
+                                  id=${menu.id},item=${item})}">
+    </th:block>
+    <th:block th:each="menuItem: ${items}" th:if="${session.loggedIn}">
+        <th:block th:replace="~{fragments/menu-item/update-modal ::
+                       updateItemModal(id=${menuItem.id},menuId=${id},item=${menuItem})}">
+        </th:block>
+        <th:block th:replace="~{fragments/confirm-modal :: confirmModal('Confirm Delete',
+                                'Are you sure you want to delete menu item?', ${menuItem.id},
+                                ~{::footerContent})}">
+            <form th:fragment="footerContent" class="mx-0"
+                  th:action="@{/menu/{menuId}/item/delete/{id}(menuId=${menu.id}, id=${menuItem.id})}"
+                  th:method="post">
+                <button type="submit" class="btn bg-gradient-danger my-0"> Delete</button>
+            </form>
+        </th:block>
+    </th:block>
+</section>
+</body>
+</html>

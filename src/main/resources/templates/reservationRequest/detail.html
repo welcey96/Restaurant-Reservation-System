@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}"
+      lang="en">
+<head>
+    <link th:href="@{/css/dining-table.css}" rel="stylesheet"/>
+    <title>Reservation Request Details</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card mx-auto min-vh-97">
+        <div class="card-header">
+            <h6>Reservation Request Details</h6>
+        </div>
+        <div class="card shadow-lg col-md-8 mx-auto">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Event Information</h6>
+                        <p><strong>Event:</strong> <span th:text="${reservation.seating.event.name}"></span></p>
+                        <p><strong>Seating Time:</strong> <span th:text="${#temporals.format(reservation.seating.startDateTime,'yyyy-MM-dd hh:mm a')}"></span></p>
+                        <p><strong>Status:</strong> <span th:text="${reservation.status}"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Guest Information</h6>
+                        <p><strong>Name:</strong> <span th:text="${reservation.firstName + ' ' + reservation.lastName}"></span></p>
+                        <p><strong>Email:</strong> <span th:text="${reservation.email}"></span></p>
+                        <p><strong>Group Size:</strong> <span th:text="${reservation.groupSize}"></span></p>
+                    </div>
+                </div>
+
+<!--                <div class="card-header">-->
+<!--                    <h5 class="mt-4">Manage Reservation Request</h5>-->
+<!--                </div>-->
+
+                <div th:if="${reservation.diningTable}">
+                    <h6>Assigned Table</h6>
+                    <p><strong>Table ID:</strong> <span th:text="${reservation.diningTable.id}"></span></p>
+                    <p><strong>Number of Seats:</strong> <span th:text="${reservation.diningTable.numberOfSeats}"></span></p>
+                    <p th:if="${reservation.diningTable.archived}" class="text-warning">
+                        <i class="fas fa-exclamation-triangle"></i> This table has been archived
+                    </p>
+                </div>
+
+<!--                tr th:each="table, count : ${diningTables}">-->
+<!--                <td>-->
+<!--                    <span class="text-secondary text-xs font-weight-bold" th:text="${count.index + 1}"></span>-->
+<!--                </td>-->
+<!--                <td>-->
+
+                <div th:if="${reservation.status != T(nbcc.enums.ReservationStatus).APPROVED}">
+                    <form th:action="@{/reservation/approve/{id}(id=${reservation.id})}" method="post">
+                        <div class="mb-3">
+                            <label for="tableId" class="form-label">Select Table</label>
+                            <select class="form-select" id="tableId" name="tableId">
+                                <option value="">Choose a table...</option>
+                                <option th:each="table,count : ${reservedTables}"
+                                        th:value="${table.id}"
+                                        th:text="${'Table ' + (count.index + 1) + ' (' + table.numberOfSeats + ' seats)'}">
+                                </option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Approve Reservation</button>
+                    </form>
+                    <form th:action="@{/reservation/deny/{id}(id=${reservation.id})}" method="post" class="mt-2">
+                        <button type="submit" class="btn btn-danger">Deny Reservation</button>
+                    </form>
+                </div>
+
+                <div class="card-footer text-end p-0 mt-3">
+                    <a th:href="@{/reservation/list}" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

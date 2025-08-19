@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Events</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card shadow-card my-2">
+        <div class="card-body">
+            <form th:action="@{/events/filter}" method="get">
+                <div class="row">
+                    <div class="col-sm-3 col-md-2">
+                        <label for="selectedFilter" class="form-label font-weight-normal">Filter Event Date</label>
+                        <select class="card form-select border-radius-md" id="selectedFilter" name="selectedFilter"
+                                th:onchange="this.form.submit()">
+                            <option th:each="filter : ${eventFilters}"
+                                    th:value="${filter.name}"
+                                    th:text="${filter.name}"
+                                    th:selected="${filter.name == selectedFilter}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3 col-md-2" th:unless="${selectedFilter == 'all'}">
+                        <label for="startDate" class="form-label font-weight-normal"
+                               th:text="${selectedFilter == 'between' ? 'Date From' : 'Start Date'}">
+                        </label>
+                        <input type="date" class="card form-control" name="startDate" id="startDate"
+                               th:value="${startDate}" th:onchange="this.form.submit()"/>
+                    </div>
+                    <div class="col-sm-3 col-md-2" th:if="${selectedFilter == 'between'}">
+                        <label for="endDate" class="form-label font-weight-normal"> Date To </label>
+                        <input type="date" class="card form-control" name="endDate" id="endDate"
+                               th:value="${endDate}" th:onchange="this.form.submit()"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="card shadow-card">
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap flex-md-nowrap">
+            <h6>Events</h6>
+            <a class="btn btn-primary mb-0 text-end move-on-hover" th:href="@{/event/create}"
+               th:if="${session.loggedIn}">Create Event</a>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+            <div class="table-responsive">
+                <table class="table align-items-center mb-0">
+                    <thead>
+                    <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-4">
+                            Name
+                        </th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Start Date
+                        </th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            End Date
+                        </th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Price
+                        </th>
+                        <th class="text-secondary opacity-7"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="event : ${events}">
+                        <td class="align-middle ps-4">
+                            <h6 class="mb-0 text-xs font-weight-bold" th:text="${event.name}"></h6>
+                        </td>
+                        <td class="align-middle ps-4">
+                            <span class="text-secondary text-xs font-weight-bold" th:text="${event.startDate}"></span>
+                        </td>
+                        <td class="align-middle ps-4">
+                            <span class="text-secondary text-xs font-weight-bold" th:text="${event.endDate}"></span>
+                        </td>
+                        <td class="align-middle ps-4">
+                            <span class="text-success text-xs font-weight-bold"
+                                  th:text="${#numbers.formatCurrency(event.price)}"></span>
+                        </td>
+                        <td class="align-middle ps-4">
+                          <div class="d-flex flex-wrap gap-3 align-items-center font-weight-bold text-xs">
+                              <a th:href="@{/seatingtime/event/{id}/create(id=${event.id})}"
+                                 class="text-primary move-on-hover" th:if="${session.loggedIn}">
+                                  Add Seating
+                              </a>
+                              <a th:href="@{/event/details/{id}(id=${event.id})}"
+                                 class="text-secondary move-on-hover">
+                                  Details
+                              </a>
+                              <a th:href="@{/event/edit/{id}(id=${event.id})}" th:if="${session.loggedIn}"
+                                 class="text-secondary move-on-hover">
+                                  Update
+                              </a>
+                              <a th:href="@{/event/delete/{id}(id=${event.id})}" th:if="${session.loggedIn}"
+                                 class="text-danger move-on-hover">
+                                  Delete
+                              </a>
+                          </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <h6 th:if="${events.isEmpty()}"
+                    class="text-sm text-center font-weight-light text-primary my-2">
+                    No Events Available
+                </h6>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

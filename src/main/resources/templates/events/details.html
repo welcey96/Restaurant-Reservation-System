@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Details</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card min-vh-97">
+        <div class="card-header">
+            <h6 class="font-weight-bold text-dark">Event Details</h6>
+
+        </div>
+        <div class="card shadow-lg col-md-10 mb-3 mx-md-auto">
+            <div class="card-body pt-0 pt-sm-4">
+                <div class="card bg-dark text-white shadow-lg" th:classappend="${session.loggedIn} ? '': 'pb-4'">
+                    <div class="card-header bg-dark pb-2 d-flex justify-content-between">
+                        <h4 class="text-bold text-primary mb-0" th:text="${event.name}"></h4>
+                        <a th:href="@{/reservation/event/{id}(id=${event.id})}" th:if="${session.loggedIn}"
+                           class="btn btn-sm text-white bg-success mb-0 move-on-hover">
+                            <i class="fa-solid fa-list-check me-1"></i>View Confirmed Reservations
+                        </a>
+                    </div>
+                    <div class="card-body py-0">
+                        <div class="row">
+                            <div class="col-md-4 align-content-center">
+                                <p class="mb-2 text-xs">Description:
+                                    <span class="font-weight-bold ms-sm-2"
+                                          th:if="${!#strings.isEmpty(event.description)}"
+                                          th:text="${event.description}"></span>
+                                    <span class="font-weight-normal ms-sm-2"
+                                          th:if="${#strings.isEmpty(event.description)}"
+                                          th:text="'n/a'"></span>
+                                </p>
+                                <p class="mb-2 text-xs"> Start Date:
+                                    <span class="font-weight-bold ms-sm-2" th:text="${event.startDate}"></span>
+                                </p>
+                                <p class="mb-2 text-xs">End Date:
+                                    <span class="font-weight-bold ms-sm-2" th:text="${event.endDate}"></span>
+                                </p>
+                                <p class="mb-2 text-xs">Price:
+                                    <span class="font-weight-bold ms-sm-2 text-success"
+                                          th:text="${#numbers.formatCurrency(event.price)}"></span>
+                                </p>
+                                <p class="mb-2 text-xs">Layout: <span class="font-weight-bold ms-sm-2"
+                                                                      th:text="${event.layout.name}"></span> <span
+                                        th:if="${event.layout.archived}" class="badge bg-warning ms-2">Archived</span>
+                                </p>
+                                <p class="mb-2 text-xs">Created Date:
+                                    <span class="font-weight-bold ms-sm-2"
+                                          th:text="${#temporals.format(event.createdDate, 'yyyy-MM-dd hh:mm a')}"></span>
+                                </p>
+                            </div>
+                            <div class="col-md-4" th:unless="${event.menu.archived}">
+                                <a th:href="@{/menu/details/{id}(id=${event.menu.id})}"
+                                   class="card shadow-card bg-primary h-auto move-on-hover">
+                                    <div class="card-body text-white text-start">
+                                        <div>
+                                            <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                                                <i class="fa-solid fa-utensils text-dark fw-bold"></i>
+                                            </div>
+                                            <h5 class="text-white font-weight-bold mb-0 mt-3"
+                                                th:text="${event.menu.name}">
+                                            </h5>
+                                            <span class="text-white text-sm"> Menu</span>
+                                        </div>
+                                        <p class="text-white text-xs text-end mt-auto mb-0"
+                                           th:unless="${event.menu.items.isEmpty()}">
+                                            <i class="fa-solid fa-money-bill-wheat me-1"></i>
+                                            <span th:text="${event.menu.items.size()} + ' item' +
+                                                ${event.menu.items.size() &gt; 1 ? 's' : ''}"></span>
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-footer text-center text-sm-end" th:if="${session.loggedIn}">
+                        <a th:href="@{/event/edit/{id}(id=${event.id})}"
+                           class="btn btn-sm text-white bg-warning mb-sm-0 move-on-hover">
+                            Update
+                        </a>
+                        <a th:href="@{/event/delete/{id}(id=${event.id})}"
+                           class="btn btn-sm text-white bg-danger mb-sm-0 move-on-hover">
+                            Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-header py-3 d-flex justify-content-between align-items-center flex-wrap">
+                <h6 class="mb-0">Seating Times</h6>
+                <a th:href="@{/seatingtime/event/{id}/create(id=${event.id})}" th:if="${session.loggedIn}"
+                   class="btn btn-sm btn-outline-primary shadow-none mb-0 move-on-hover">
+                    Add Seating Time
+                </a>
+            </div>
+            <div class="card-body shadow-lg pt-0 px-0 border-radius-lg">
+                <div class="table-responsive">
+                    <table class="table align-items-center mb-0">
+                        <thead>
+                        <tr>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-4">
+                                <span th:unless="${event.startDate == event.endDate}"> Start Date & Time </span>
+                                <span th:unless="${event.startDate != event.endDate}"> Start Time </span>
+                            </th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-4">
+                                <span th:unless="${event.startDate == event.endDate}"> End Date & Time </span>
+                                <span th:unless="${event.startDate != event.endDate}"> End Time </span>
+                            </th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                Duration (minutes)
+                            </th>
+                            <th th:if="${session.loggedIn}"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="seatingTime : ${event.seatingTimes}">
+                            <td class="ps-4">
+                                <h6 class="mb-0 text-xs font-weight-bold">
+                                    <span th:unless="${event.startDate == event.endDate}"
+                                          th:text="${#temporals.format(seatingTime.startDateTime,
+                                          'yyyy-MM-dd hh:mm a')}"></span>
+                                    <span th:unless="${event.startDate != event.endDate}"
+                                          th:text="${#temporals.format(seatingTime.startDateTime,
+                                                      'hh:mm a')}"></span>
+                                </h6>
+                            </td>
+                            <td class="ps-4">
+                                <h6 class="mb-0 text-xs font-weight-bold">
+                                    <span th:unless="${event.startDate == event.endDate}"
+                                          th:text="${#temporals.format(seatingTime.endDateTime(),
+                                            'yyyy-MM-dd hh:mm a')}">
+                                    </span>
+                                    <span th:unless="${event.startDate != event.endDate}"
+                                          th:text="${#temporals.format(seatingTime.endDateTime(), 'hh:mm a')}">
+                                    </span>
+                                </h6>
+                            </td>
+                            <td>
+                                <h6 class="mb-0 text-xs font-weight-bold">
+                                    <span th:text="${seatingTime.duration}"> </span>
+                                </h6>
+                            </td>
+                            <td class="px-4 d-flex justify-content-center justify-content-md-start align-items-center
+                                       column-gap-3" th:if="${session.loggedIn}">
+                                <a th:href="@{/seatingtime/event/{eventId}/edit/{id}(eventId=${event.id},id=${seatingTime.id})}"
+                                   class="text-secondary text-xs font-weight-bold move-on-hover">
+                                    Update
+                                </a>
+                                <button type="button"
+                                        class="text-danger border-0 text-xs font-weight-bold bg-transparent move-on-hover"
+                                        data-bs-toggle="modal" th:data-bs-target="'#confirmModal_' + ${seatingTime.id}">
+                                    Delete
+                                </button>
+                            </td>
+                            <th:block th:replace="~{fragments/confirm-modal :: confirmModal('Confirm Delete',
+                                'Are you sure you want to delete seating time?', ${seatingTime.id},
+                                ~{::footerContent})}">
+                                <form th:fragment="footerContent" class="mx-0"
+                                      th:action="@{/seatingtime/event/{id}/delete/{seatingTimeId}
+                                      (id=${event.id}, seatingTimeId=${seatingTime.id})}"
+                                      method="post">
+                                    <button type="submit" class="btn bg-gradient-danger my-0"> Delete</button>
+                                </form>
+                            </th:block>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <h6 th:if="${event.seatingTimes.isEmpty()}"
+                        class="text-sm text-center font-weight-light text-primary my-2">
+                        No Seating Times Available
+                    </h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

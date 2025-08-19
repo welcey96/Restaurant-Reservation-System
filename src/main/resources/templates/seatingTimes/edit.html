@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Seating Time</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card min-vh-97">
+        <div class="card-header pb-0">
+            <h6>Update Seating Time</h6>
+        </div>
+        <div class="card pt-0 shadow-lg col-md-4 mb-3 mx-md-auto">
+            <div class="card-body">
+                <form th:action="@{/seatingtime/event/{eventId}/edit/{id}(eventId=${eventId},id=${seatingTime.id})}"
+                      th:object="${seatingTime}" th:method="post">
+                    <input type="hidden" th:field="*{id}"/>
+                    <div class="form-group">
+                        <label class="control-label" for="startDateTime">Seating Date & Time</label>
+                        <input type="datetime-local" id="startDateTime" th:field="*{startDateTime}"
+                               class="form-control"/>
+                        <div class="alert text-sm text-danger p-1" th:errors="*{startDateTime}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="duration"> Duration (minutes)</label>
+                        <input type="number" th:field="*{duration}" id="duration" class="form-control"/>
+                        <div class="alert text-sm text-danger p-1" th:errors="*{duration}"></div>
+                    </div>
+                    <div class="card-footer text-end p-0">
+                        <input type="submit" name="action" value="Update" class="btn btn-primary"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

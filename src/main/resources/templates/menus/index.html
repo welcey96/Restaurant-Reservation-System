@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Menus</title>
+</head>
+<body>
+<section id="menu-list" layout:fragment="content">
+    <div class="card mx-auto min-vh-97">
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap flex-md-nowrap">
+            <h6>Menus</h6>
+            <button type="button" class="btn btn-primary mb-0 text-end move-on-hover"
+                    th:if="${session.loggedIn} and not ${menus.isEmpty()}"
+                    data-bs-toggle="modal" th:data-bs-target="'#addMenuModal'">
+                Create Menu
+            </button>
+        </div>
+        <div class="card-body px-md-6">
+            <div class="row gap-3">
+                <a class="col-md-3 card item shadow-xl h-auto move-on-hover menu-item"
+                   th:href="@{/menu/details/{id}(id=${menu.id})}"
+                   th:each="menu: ${menus}">
+                    <div class="card-header text-end px-0 py-2" th:if="${session.loggedIn}">
+                        <form th:onsubmit="|window.location.href='@{/menu/delete/{id}(id=${menu.id})}'; return false|"
+                              th:method="post">
+                            <button class="btn btn-sm mb-0 py-2 px-3 shadow-xs bg-gray-100 move-on-hover" type="submit">
+                                <i class="fa-solid fa-trash text-xs text-danger"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="card-body text-center" th:classappend="${session.loggedIn} ? 'py-3' : 'py-4'">
+                        <i class="fa-solid fa-utensils h4"></i>
+                        <h6 class="text-md text-start text-primary" th:text="${menu.name}"></h6>
+                        <p class="text-xs text-start mb-0" th:text="${menu.description}"></p>
+                    </div>
+                    <div class="card-footer d-flex flex-wrap pe-0"
+                         th:classappend="(${session.loggedIn} and not ${menu.items.isEmpty()}) ?
+                            'justify-content-between' : 'justify-content-end'">
+                        <p class="text-primary text-xs text-end my-auto pe-2"
+                           th:unless="${menu.items.isEmpty()}">
+                            <i class="fa-solid fa-money-bill-wheat me-1"></i>
+                            <span th:text="${menu.items.size()} + ${menu.items.size() &gt; 1 ? ' items' : ' item'}"></span>
+                        </p>
+                        <div th:if="${session.loggedIn}" class="d-flex flex-wrap-reverse">
+                            <button type="button" class="btn btn-sm mb-0 py-2 px-3 shadow-xs move-on-hover"
+                                    data-bs-toggle="modal" th:data-bs-target="'#addItemModal_' + ${menu.id}"
+                                    th:onclick="event.preventDefault()">
+                                <i class="fa-solid fa-plus text-xs text-success"></i>
+                                Add Item
+                            </button>
+                            <button type="button" class="btn btn-sm mb-0 py-2 px-3 shadow-xs move-on-hover"
+                                    data-bs-toggle="modal" th:data-bs-target="'#updateMenuModal_' + ${menu.id}"
+                                    th:onclick="event.preventDefault()">
+                                <i class="fa-solid fa-marker text-xs text-warning"></i>
+                                Update
+                            </button>
+                        </div>
+                    </div>
+                </a>
+
+                <button type="button" class="m-auto col-sm-6 col-lg-4 btn p-4 border-dashed btn-outline-primary text-dark
+                        font-weight-light height-300" data-bs-toggle="modal" th:data-bs-target="'#addMenuModal'"
+                        th:if="${session.loggedIn} and ${menus.isEmpty()}">
+                    <i class="fa-solid fa-plus h2 d-block"></i>
+                    No menus available. Click here to create one
+                </button>
+
+                <div class="font-weight-light text-md text-center text-primary"
+                     th:if="not ${session.loggedIn} and ${menus.isEmpty()}">
+                    No menus available
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <th:block th:each="menu: ${menus}" th:if="${session.loggedIn}">
+        <th:block th:replace="~{fragments/menu-item/add-modal ::
+            addItemModal(id=${menu.id}, item=${menu})}">
+        </th:block>
+        <th:block th:replace="~{fragments/menus/update-modal ::
+           updateMenuModal(menu=${menu})}">
+        </th:block>
+    </th:block>
+    <th:block th:if="${session.loggedIn}" th:insert="~{fragments/menus/add-modal :: addMenuModal(menu=${menu})}">
+    </th:block>
+</section>
+</body>
+</html>

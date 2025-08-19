@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}"
+      lang="en">
+<head>
+    <link th:href="@{/css/dining-table.css}" rel="stylesheet"/>
+    <title>Reservation Requests</title>
+    <style>
+        /* Reduce padding inside the card */
+        .card-body {
+            padding: 0.75rem;
+        }
+
+        /* Adjust space between the sections in the card */
+        .card-text {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Header style for Event and Guest Information */
+        .info-header {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            color: #6c757d; /* Changed to a muted gray color */
+            font-size: 0.875rem; /* Slightly smaller font size */
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+<!--    <div class="card shadow-card mt-0 my-4">-->
+        <!-- Filter section - only visible to logged in users -->
+        <div class="card shadow-card mt-0 my-4" th:if="${session.loggedIn}">
+        <div class="card-header">
+            <h6 class="card-subtitle text-dark move-on-hover">Filter Reservations</h6>
+        </div>
+        <div class="card-body pt-0">
+            <form th:action="@{/reservation/list}" method="get">
+                <div class="row">
+                    <div class="col-sm-3 col-md-2">
+                        <label for="selectedFilter" class="form-label font-weight-normal">By Status</label>
+                        <select class="card form-select border-radius-md" id="selectedFilter" name="selectedFilter"
+                                th:onchange="this.form.submit()">
+                            <option th:each="filter : ${reservationFilters}"
+                                    th:value="${filter.name}"
+                                    th:text="${filter.name}"
+                                    th:selected="${filter.name == selectedFilter}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3 col-md-3">
+                        <label for="eventId" class="form-label font-weight-normal">By Event</label>
+                        <select class="card form-select border-radius-md" id="eventId" name="eventId"
+                                th:onchange="this.form.submit()">
+                            <option value="">All Events</option>
+                            <option th:each="event : ${events}"
+                                    th:value="${event.id}"
+                                    th:text="${event.name}"
+                                    th:selected="${event.id == selectedEventId}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-card">
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap flex-md-nowrap">
+<!--            <h6>Reservation Requests</h6>-->
+            <h6 th:if="${session.loggedIn}">Reservation Requests</h6>
+            <h6 th:unless="${session.loggedIn}">Create a Reservation</h6>
+            <a class="btn btn-primary mb-0 text-end" th:href="@{/reservation/create}">Create Reservation</a>
+        </div>
+<!--        <div class="card-body px-0 pt-0 pb-2">-->
+        <div class="card-body px-0 pt-0 pb-2" th:if="${session.loggedIn}">
+            <div class="row">
+                <div th:if="${#lists.isEmpty(reservations)}" class="col-12 text-center text-danger">
+                    No reservations found
+                </div>
+                <div th:each="reservation : ${reservations}" class="col-12 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body d-flex flex-column">
+                            <!-- Event Information Section -->
+                            <div class="info-header">Event Information</div>
+                            <p class="card-text">
+                                <strong class="text-muted">Event:</strong>
+                                <span th:text="${reservation.seating.event.name}">Event Name</span>
+                            </p>
+                            <p class="card-text">
+                                <strong class="text-muted">Seating Time:</strong>
+                                <span th:text="${#temporals.format(reservation.seating.startDateTime, 'yyyy-MM-dd hh:mm a')}">Seating Time</span>
+                            </p>
+
+                            <hr class="my-2">
+
+                            <!-- Guest Information Section -->
+                            <div class="info-header">Guest Information</div>
+                            <p class="card-text">
+                                <strong class="text-muted">Name:</strong>
+                                <span th:text="${reservation.firstName + ' ' + reservation.lastName}">Guest Name</span>
+                            </p>
+                            <p class="card-text">
+                                <strong class="text-muted">Email:</strong>
+                                <span th:text="${reservation.email}">Email</span>
+                            </p>
+                            <p class="card-text">
+                                <strong class="text-muted">Group Size:</strong>
+                                <span th:text="${reservation.groupSize}">Group Size</span>
+                            </p>
+
+                            <div class="mt-auto text-center">
+                                <span class="badge badge-sm"
+                                      th:classappend="'bg-gradient-' + ${reservation.status == T(nbcc.enums.ReservationStatus).APPROVED ? 'success' : (reservation.status == T(nbcc.enums.ReservationStatus).DENIED ? 'danger' : 'warning')}"
+                                      th:text="${reservation.status.name}">Status</span>
+                            </div>
+                            <div class="mt-3 text-center">
+                                <a th:href="@{/reservation/details/{id}(id=${reservation.id})}"
+                                   class="btn btn-sm btn-outline-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Message for guests on how create reservation-->
+        <div class="card-body text-center" th:unless="${session.loggedIn}">
+            <p class="text-muted">Please use the Create Reservation button to make a new reservation request.</p>
+        </div>
+    </div>
+</section>
+</body>
+</html>

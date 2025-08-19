@@ -1,0 +1,86 @@
+<nav th:fragment="navbar"
+     class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start
+        ms-2 bg-white my-2 overflow-y-visible" id="sidenav-main">
+    <div class="sidenav-header position-relative p-4 d-flex align-items-center justify-content-center">
+        <a class="navbar-brand text-center p-0 m-0 font-weight-bold" th:href="@{/}">
+            EVENTS RESERVATION
+        </a>
+        <button id="iconNavbarSidenav1" class="sidenav-toggler btn-sm bg-white rounded shadow-lg p-2
+                    border-0 justify-content-center align-items-center">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
+    </div>
+    <hr class="horizontal dark mt-0">
+    <div class="w-auto" id="sidenav-collapse-main">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/events}"
+                   th:classappend="${session.navRoute eq 'event' or
+                                    session.navRoute eq 'events' ? 'active' : ''}">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2
+                                d-flex align-items-center justify-content-center"
+                         data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Events">
+                        <i class="fa-solid fa-star color-background"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Events</span>
+                </a>
+            </li>
+            <li class="nav-item" th:if="${session.loggedIn}">
+                <a class="nav-link" th:href="@{/layout}"
+                   th:classappend="${session.navRoute eq 'layout' or
+                                    session.navRoute eq 'layouts' ? 'active' : ''}">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2
+                                 d-flex align-items-center justify-content-center"
+                         data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Layouts">
+                        <i class="fa-solid fa-table-cells-large color-background"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Layouts</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/reservation/list}" th:classappend="${session.navRoute
+                    eq 'reservation' or session.navRoute eq 'reservations' ? 'active' : ''}">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2
+                                d-flex align-items-center justify-content-center"
+                         data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Reservations">
+                        <i class="fa-regular fa-calendar-days color-background"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Reservations</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/menus}"
+                   th:classappend="${session.navRoute eq 'menu' or
+                                    session.navRoute eq 'menus' ? 'active' : ''}">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2
+                                d-flex align-items-center justify-content-center"
+                         data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Menus">
+                        <i class="fa-solid fa-clipboard-list color-background"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Menus</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="sidenav-footer">
+        <ul class="navbar-nav w-100 position-absolute bottom-0">
+            <li class="nav-item">
+                <div class="nav-link" th:unless="${session.loggedIn}">
+                    <a class="btn bg-primary text-white w-100 px-0" th:href="@{/login}"
+                       data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Login">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        <span class="nav-link-text ms-1">Login</span>
+                    </a>
+                </div>
+                <form class="nav-link" th:if="${session.loggedIn}" th:action="@{/logout}" method="post">
+                    <button type="submit" class="btn bg-primary text-white w-100 px-0"
+                            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Logout">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        <span class="nav-link-text ms-1">Logout</span>
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>

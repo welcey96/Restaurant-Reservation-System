@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}"
+      lang="en">
+<head>
+    <link th:href="@{/css/dining-table.css}" rel="stylesheet"/>
+    <title>Delete Layout Confirmation</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card">
+        <div class="card-header pb-0">
+            <a th:href="@{/layout}" class="btn btn-secondary">Back to Layout</a>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <h5 class="alert-heading">Warning!</h5>
+                <p>You are about to delete the layout "<strong th:text="${layout.name}"></strong>". This action cannot be undone.</p>
+                <p>All associated dining tables will also be permanently deleted.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Layout Information</h5>
+                    <div class="mb-3">
+                        <strong>Name:</strong> <span th:text="${layout.name}"></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Description:</strong> <span th:text="${layout.description}"></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Created Date:</strong> <span th:text="${#temporals.format(layout.createdDate, 'MMM dd, yyyy')}"></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Last Updated:</strong> <span th:text="${#temporals.format(layout.lastUpdated, 'MMM dd, yyyy hh:mm a')}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <h5 class="mt-4">Dining Tables to be Deleted</h5>
+            <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0" th:if="${!diningTables.empty}">
+                    <thead>
+                    <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                            Number of Seats
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="table, count : ${diningTables}">
+                        <td>
+                            <span class="text-secondary text-xs font-weight-bold" th:text="${count.index + 1}"></span>
+                        </td>
+                        <td>
+                            <span class="text-secondary text-xs font-weight-bold" th:text="${table.numberOfSeats}"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="alert alert-info" th:if="${diningTables.empty}">
+                    <p>This layout does not have any dining tables.</p>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex justify-content-between">
+                <form th:action="@{/layout/delete/{id}(id=${layout.id})}" method="post">
+                    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

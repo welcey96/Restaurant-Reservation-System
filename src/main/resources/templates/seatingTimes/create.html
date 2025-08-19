@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Seating Time</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card min-vh-97">
+        <div class="card-header">
+            <h6 class="font-weight-bold">Add Seating Time</h6>
+        </div>
+        <div class="card shadow-lg col-md-10 mb-3 mx-md-auto max-width-950">
+            <div class="px-4 p-md-0 row g-2 g-md-0">
+                <div class="col-md-5 bg-dark border-radius-lg border-radius-top-end-md-0 border-bottom-end-radius-0">
+                    <div class="card-header bg-dark">
+                        <h5 class="text-bold text-primary mb-0" th:text="${event.name}"></h5>
+                    </div>
+                    <div class="card-body pt-0 text-white">
+                        <p class="mb-2 text-xs">Description:
+                            <span class="font-weight-bold ms-sm-2"
+                                  th:if="${!#strings.isEmpty(event.description)}"
+                                  th:text="${event.description}"></span>
+                            <span class="font-weight-normal ms-sm-2"
+                                  th:if="${#strings.isEmpty(event.description)}"
+                                  th:text="'n/a'"></span>
+                        </p>
+                        <p class="mb-2 text-xs"> Start Date:
+                            <span class="font-weight-bold ms-sm-2" th:text="${event.startDate}"></span>
+                        </p>
+                        <p class="mb-2 text-xs">End Date:
+                            <span class="font-weight-bold ms-sm-2" th:text="${event.endDate}"></span>
+                        </p>
+                        <p class="mb-2 text-xs">Price:
+                            <span class="font-weight-bold ms-sm-2"
+                                  th:text="${#numbers.formatCurrency(event.price)}"></span>
+                        </p>
+                        <p class="mb-2 text-xs">Created Date:
+                            <span class="font-weight-bold ms-sm-2"
+                                  th:text="${#temporals.format(event.createdDate, 'yyyy-MM-dd hh:mm a')}"></span>
+                        </p>
+                    </div>
+
+                </div>
+                <div class="col">
+                    <div class="card-body">
+                        <form th:action="@{/seatingtime/event/{eventId}/create(eventId=${eventId})}"
+                              th:object="${seatingTime}"
+                              th:method="post">
+                            <div class="form-group">
+                                <label class="control-label" for="startDateTime">Seating Date & Time</label>
+                                <input type="datetime-local" id="startDateTime" th:field="*{startDateTime}"
+                                       class="form-control"/>
+                                <div class="alert text-sm text-danger p-1" th:errors="*{startDateTime}"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="duration"> Duration (minutes)</label>
+                                <input type="number" th:field="*{duration}" id="duration" class="form-control"/>
+                                <div class="alert text-sm text-danger p-1" th:errors="*{duration}"></div>
+                            </div>
+                            <div class="card-footer text-end p-0">
+                                <input type="submit" name="action" value="Add" class="btn btn-primary"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

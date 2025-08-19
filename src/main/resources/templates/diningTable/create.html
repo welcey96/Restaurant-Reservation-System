@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}"
+      lang="en">
+<head>
+    <link th:href="@{/css/dining-table.css}" rel="stylesheet"/>
+    <title>Add Dining Table</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card col-6 mx-auto">
+        <div class="card-header pb-0">
+            <a th:href="@{/layout}" class="btn btn-secondary">Back to Layout</a>
+        </div>
+        <div class="card-header d-flex justify-content-between">
+            <h6>Add Dining Table to Layout: <span th:text="${layout.name}"></span></h6>
+        </div>
+        <div class="card-body pt-0">
+            <form th:action="@{/layout/{id}/diningtable/create(id=${layout.id})}" th:object="${diningTable}" th:method="post">
+                <div class="form-group">
+                    <label class="control-label">Number of Seats:
+                        <input type="number" min="1" th:field="*{numberOfSeats}" class="form-control"/>
+                    </label>
+                    <div class="alert text-sm text-danger p-1" th:errors="*{numberOfSeats}"></div>
+                </div>
+                <div class="form-group my-2 d-flex justify-content-between">
+                    <input type="submit" value="Add Seat" class="btn btn-primary"/>
+<!--                    <a th:href="@{/layout/edit/{id}(id=${layout.id})}" class="btn btn-secondary">Cancel</a>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

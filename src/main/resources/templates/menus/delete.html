@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Delete Menu - ' + ${menu.name}"></title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card min-vh-97">
+        <div class="card-header">
+            <h6 class="font-weight-bold text-dark">Delete Menu</h6>
+        </div>
+        <div class="card shadow-lg col-md-10 mb-3 mx-md-auto">
+            <div class="card-header pt-0 pt-md-4 align-items-center">
+                <h5 class="font-weight-bolder">Are you sure you want to delete menu?</h5>
+                <p class="text-sm mb-0">
+                    Deleting this menu will also remove all associated menu items permanently.
+                </p>
+            </div>
+            <div class="card-body pt-0">
+                <div class="card bg-dark text-white shadow-lg">
+                    <div class="card-header bg-dark pb-2">
+                        <h5 class="text-bold text-primary mb-0" th:text="${menu.name}"></h5>
+                    </div>
+                    <div class="card-body pt-0">
+                        <p class="mb-2 text-xs">Description:
+                            <span class="font-weight-bold ms-sm-2"
+                                  th:if="${!#strings.isEmpty(menu.description)}"
+                                  th:text="${menu.description}"></span>
+                            <span class="font-weight-normal ms-sm-2"
+                                  th:if="${#strings.isEmpty(menu.description)}"
+                                  th:text="'n/a'"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-header pt-3 align-items-center">
+                <h6 class="mb-0">Menu Items</h6>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-items-center mb-0">
+                    <thead>
+                    <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-4">
+                            Name
+                        </th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                            Description
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${menu.items}">
+                        <td class="ps-4">
+                            <h6 class="mb-0 text-xs font-weight-bold" th:text="${item.name}"></h6>
+                        </td>
+                        <td>
+                            <h6 class="mb-0 text-xs font-weight-bold" th:text="${item.description}"></h6>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <h6 th:if="${menu.items.isEmpty()}"
+                    class="text-sm text-center font-weight-light text-dark my-2">
+                    No Menu Items Available
+                </h6>
+            </div>
+            <div class="card-footer text-end align-items-center">
+                <form th:action="@{/menu/delete/{id}(id=*{id})}" th:method="post">
+                    <input type="submit" name="action" value="Delete" class="btn btn-danger mb-0"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

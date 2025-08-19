@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,800" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/dashboard.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <title>Sign In</title>
+</head>
+<body>
+<main class="main-content min-vh-100 p-sm-4 d-flex bg-gradient-faded-white">
+    <div class="card shadow-xl col-sm-6 col-md-5 max-width-400 m-auto">
+        <div class="card-header"><h3 class="text-primary text-center mb-0">Sign In</h3></div>
+        <div class="card-body py-0">
+            <div th:if="${message}" class="alert alert-sm alert-warning py-2">
+                <span th:text="${message}" class="text-sm"></span>
+            </div>
+            <form th:action="@{/login}" method="post" th:object="${login}">
+                <div class="form-group">
+                    <label class="control-label" for="username">Username</label>
+                    <input th:field="*{username}" id="username" class="form-control" placeholder="Enter username"/>
+                    <div class="alert text-sm text-danger p-1" th:errors="*{username}"></div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="password">Password</label>
+                    <input th:type="password" th:field="*{password}" id="password" class="form-control"
+                           placeholder="Enter password"/>
+                    <div class="alert text-sm text-danger p-1" th:errors="*{password}"></div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Sign In" class="btn btn-primary w-100"/>
+                </div>
+            </form>
+        </div>
+        <p class="card-footer text-center text-xs pt-0">
+            Don't have an account?
+            <a class="font-weight-bold text-decoration-underline" th:href="@{/register}">Sign Up</a>
+        </p>
+    </div>
+</main>
+
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>

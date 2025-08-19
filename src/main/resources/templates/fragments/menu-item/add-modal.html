@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<div th:fragment="addItemModal(id, item)" class="modal modal-md fade"
+     data-bs-backdrop="static" data-bs-keyboard="false" th:id="'addItemModal_' + ${id}"
+     tabindex="-1" aria-labelledby="addItemModal">
+    <div class="modal-dialog">
+        <div class="modal-content border-0">
+            <div class="modal-header align-items-center border-bottom-0">
+                <h6 class="modal-title">
+                    <i class="fa-solid fa-plus text-xl font-weight-bold text-success"></i>
+                    Add Menu Item
+                </h6>
+                <button type="button" class="btn-close text-dark d-flex align-items-center"
+                        data-bs-dismiss="modal" aria-label="Close" th:onclick="|resetForm('addItemForm_' + ${id})|">
+                    <i class="fa-solid fa-xmark text-xl font-weight-bold text-danger"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:id="'addItemForm_' + ${id}"
+                      th:class="add-item-form"
+                      th:action="@{/menu/{menuId}/item/add(menuId=${id})}"
+                      th:object="${item}"
+                      th:method="post">
+                    <div class="form-group">
+                        <label class="control-label" for="name"> Name</label>
+                        <input th:field="*{name}" id="name" class="form-control"/>
+                        <div class="alert text-sm text-danger p-1 d-none" id="nameError">
+                            Name is required
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="description">Description</label>
+                        <textarea th:field="*{description}" id="description" class="form-control">
+                        </textarea>
+                    </div>
+                    <div class="modal-footer border-top-0 text-end p-0">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                                th:onclick="|resetForm('addItemForm_' + ${id})|">Cancel
+                        </button>
+                        <input type="submit" name="action" value="Add" class="btn btn-primary"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

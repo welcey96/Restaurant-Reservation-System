@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link type="image/png" sizes="96x96" rel="icon" th:href="@{/favicon.png}">
+    <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,800" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/dashboard.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <title layout:title-pattern="~{CONTENT_TITLE} - ~{LAYOUT_TITLE}"></title>
+</head>
+
+<body class="g-sidenav-show bg-gray-100" style="visibility: hidden;">
+
+<aside th:replace="~{fragments/nav :: navbar}">
+</aside>
+
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <header class="sideNavToggle--mobile align-items-center justify-content-end">
+        <button id="iconNavbarSidenav" class="btn shadow-xs text-dark p-2 mb-0" >
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </header>
+    <section layout:fragment="content" class="my-2 me-2">
+    </section>
+</main>
+
+<script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/dashboard.js}"></script>
+<script type="text/javascript" th:src="@{/js/dining-table.js}"></script>
+
+</body>
+</html>
